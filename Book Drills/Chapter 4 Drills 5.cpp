@@ -1,5 +1,7 @@
 /**
- * Change the program so that it uses doubles instead of ints
+ * Change the program so that it writes out the numbers are almost equal after writing 
+ * out which is the larger and the smaller if the two numbers differ by less than 1.0/ 
+ * 100.
 */
 
 #include <iostream>
@@ -33,9 +35,13 @@ int main(){
         }
     }
     sort(nums.begin(), nums.end());
-    
-    cout << "\nThe smallest value is: " << getSmall(nums) << "\n";
-    cout << "The largest value is: " << getLarge(nums) << "\n";
+    double s = getSmall(nums), l = getLarge(nums);
+    cout << "\nThe smallest value is: " << s << "\n";
+    cout << "The largest value is: " << l << "\n";
+
+    if(l - s < 1.0/100.0){
+        cout << "The numbers are almost equal";
+    }
 
 }
 
