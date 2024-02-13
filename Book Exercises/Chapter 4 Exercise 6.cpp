@@ -17,11 +17,11 @@ const int min_v = 1, max_v = 20, min_op = 1, max_op = 4;
 const vector<string> values = {"zero", "one", "two", "three", "four", "five",   
     "six", "seven", "eight", "nine", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 double randd(double min, double max);
-int rando(int min, int max);
+int randi(int min, int max);
 int main(){
     srand(static_cast<unsigned int>(time(0)));
     cout << "Enter a value between " << min_v << " and " << 10 << ": ";
-    int i = rando(min_v, max_v);
+    int i = randi(min_v, max_v);
     cout << values[i] << endl;
     
 
@@ -44,7 +44,7 @@ double randd(double min, double max)
     return dist(mt);
 }
 
-int rando(int min, int max){
+int randi(int min, int max){
     static mt19937 mt{random_device{}()};
     uniform_int_distribution<int> dist(min, max);
     return dist(mt);
