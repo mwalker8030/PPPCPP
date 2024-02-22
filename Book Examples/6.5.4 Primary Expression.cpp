@@ -47,6 +47,8 @@ using namespace std;
 #define AUTO false              //Automatic random input
 #define FIN true                //Final alteration of code
 #define WS '\n'                 //white space
+#define LOG false                //log output
+#define PAUSE false             //pause program
 class Token{
     public:
         char kind;
@@ -185,7 +187,7 @@ double term(vector<Token>& t){
                 if(tk.kind != WS && tk.kind != NUMBER){
                     t[0].return_token();
                 }
-                cout << "\nTerm: Returning: " + to_string(lval);
+                log( "\nTerm: Returning: " + to_string(lval));
                 return lval;
         }
     }
@@ -213,13 +215,13 @@ double primary(vector<Token>& t){
 }
 
 void log(string s){
+#if LOG    
     cout << s << endl;
+#endif    
 }
 
 void pause() {
+#if PAUSE    
     getline(cin, temp);
+#endif    
 }
-
-/**
- * It seems this version eats tokens and causes the program to not work properly.
-*/
