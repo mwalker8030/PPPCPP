@@ -82,6 +82,13 @@ class Token{
             if(kind == NUMBER) cout << value;
             else cout << kind;
         }
+
+        void reset(vector<Token> &t){
+            i = 0;
+            head = 0;
+            tail = 0;
+            t.clear();
+        }
     private:
     static int i, head, tail;
 };
@@ -109,26 +116,27 @@ double primary(vector<Token>& t);
 
 void pause();
 
+void intotoken(vector<Token>& t);
+
 string temp;
 int main() try {
     vector<Token> t;
 #if !AUTO
 #if FIN
-    char c;
-    while(cin >> noskipws >> c){
-        if(c == WS) break;
-        if(isspace(c)) continue;
-        t.push_back(Token(c));
-    }
+    intotoken(t);
 #else 
 #endif
 #endif
-    for(const auto& token : t) { 
-        token.print();
+    while(!t.empty()) {
+        for(const auto& token : t) { 
+            token.print();
+        }
+        cout << " = " << expression(t) << endl;
+        t[0].reset(t);
+        cout << "Enter empty expression to exit: \n";
+        intotoken(t);
     }
-    cout << " = " << expression(t) << endl;
-
-    } catch (exception& e) {
+} catch (exception& e) {
     cerr << e.what() << endl;
     return 1;
 } catch (...) {
@@ -145,7 +153,7 @@ double expression(vector<Token> &t){
     log("\nExpression: Token: " + string(1, tk.kind));
     while(true){
         pause();
-        log("\nExpression Token: " + string(1, tk.kind));
+        log("\nExpression loop Token: " + string(1, tk.kind));
         switch(tk.kind){
             case '+':
                 log("\nExpression: Plus: " + to_string(lval));
@@ -160,6 +168,7 @@ double expression(vector<Token> &t){
                 tk = t[0].get_token(t);
                 break;
             default:
+                t[0].return_token();
                 return lval;
         }
     }
@@ -210,6 +219,7 @@ double primary(vector<Token>& t){
         case '(': {
             double d = expression(t);
             tk = t[0].get_token(t);
+            log("\nPrimary: Next Token: " + string(1, tk.kind));
             if(tk.kind != ')'){
                 throw runtime_error("')' expected");
             }
@@ -233,4 +243,20 @@ void pause() {
 #if PAUSE    
     getline(cin, temp);
 #endif    
+}
+
+void intotoken(vector<Token> &t){
+    char c;
+    double buffer;
+    while(cin >> noskipws >> c){
+        if(c == WS) break;
+        if(c >= '0' && c <= '9'){
+            cin.putback(c);
+            cin >> buffer;
+            t.push_back(Token(NUMBER, buffer));
+            continue;
+        }
+        if(isspace(c)) continue;
+        t.push_back(Token(c));
+    }
 }
